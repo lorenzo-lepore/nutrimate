@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
 
     // System Navigation Bar configuration
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      //systemNavigationBarColor: /* Color.fromARGB(244, 178, 218, 94), */Colors.red,
       systemNavigationBarIconBrightness: Brightness.light,
       systemNavigationBarDividerColor: Color.fromARGB(0, 230, 34, 34),
     ));
@@ -42,5 +41,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// test

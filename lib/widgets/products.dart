@@ -69,7 +69,7 @@ class _ProductsPageState extends State<ProductsPage> {
             child: SearchAnchor(
               builder: (BuildContext context, SearchController controller) {
                 return SearchBar(
-                  hintText: 'Cerca prodotti...',
+                  hintText: 'Cerca prodotti',
                   elevation: const WidgetStatePropertyAll(2.0),
                   controller: controller,
                   onTap: () {},
@@ -90,13 +90,15 @@ class _ProductsPageState extends State<ProductsPage> {
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      crossAxisSpacing: 5.0,
+                      crossAxisSpacing: 15.0,
                       mainAxisSpacing: 5.0,
                     ),
                     padding: const EdgeInsets.all(8.0),
                     itemCount: products?.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
-                      return ProductCard(product: products?[index]);
+                      return ProductCard(
+                        product: products?[index],
+                      );
                     },
                   ),
                 )
