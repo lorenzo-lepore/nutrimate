@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
+import 'package:logger/logger.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage({super.key, required this.product});
@@ -12,6 +12,22 @@ class ProductDetailsPage extends StatefulWidget {
 }
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
+  final logger = Logger();
+  
+  Future<OrderedNutrients> getProductNutrients() async {
+    OrderedNutrients orderedNutrients =
+        await OpenFoodAPIClient.getOrderedNutrients(
+      country: OpenFoodFactsCountry.ITALY,
+      language: OpenFoodFactsLanguage.ITALIAN,
+    );
+  
+    logger.d(orderedNutrients.nutrients[0].name);
+    logger.d(orderedNutrients.nutrients[5].name);
+    logger.d(orderedNutrients.nutrients[10].name);
+  
+    return orderedNutrients;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +46,20 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               ),
             ),
             const SizedBox(height: 8.0),
+            FutureBuilder<OrderedNutrients>(
+              future: getProductNutrients(),
+              builder: (context, snapshot) {
+                return snapshot.hasData
+                    ? Text(
+                        snapshot.data!.nutrients.toString(),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                        ),
+                      )
+                    : const CircularProgressIndicator();
+              }
+            ),
             ButtonBar(
               alignment: MainAxisAlignment.center,
               children: [

@@ -19,12 +19,12 @@ class _ProductCardState extends State<ProductCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                ProductDetailsPage(product: widget.product),
+            builder: (context) => ProductDetailsPage(product: widget.product),
           ),
         );
       },
       child: Card(
+        color: Colors.white,
         clipBehavior: Clip.antiAlias,
         child: Padding(
           padding: const EdgeInsets.only(left: 4.0, right: 4.0),
