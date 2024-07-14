@@ -102,12 +102,14 @@ class _ProductsPageState extends State<ProductsPage> {
                     },
                   ),
                 )
-              : SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.3,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
+              : Expanded(
+                child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 1.3, // Per centrare il widget al centro della schermata
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
-                )
+              )
         ],
       ),
     );
