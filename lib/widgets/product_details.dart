@@ -17,6 +17,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     return Scaffold(
       body: Center(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 16.0),
             Image.network(widget.product?.imageFrontUrl ?? 'Immagine non trovata'),

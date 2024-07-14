@@ -99,7 +99,6 @@ class ApiService {
       '8057018224999',
       version: ProductQueryVersion.v3,
     ),
-    
   ];
 
   List<ProductQueryConfiguration> getConfigList() {
