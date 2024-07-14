@@ -47,6 +47,59 @@ class ApiService {
       '3033490004743',
       version: ProductQueryVersion.v3,
     ),
+    ProductQueryConfiguration(
+      '8000430070774',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '8076809546478',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '8001302001131',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '8001070000039',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '8004030044005 ',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '8001860258633',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '8000300391961 ',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '8005840008805',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '3560070998661',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '8003130144974',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '8006890683851',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '8057018222988',
+      version: ProductQueryVersion.v3,
+    ),
+    ProductQueryConfiguration(
+      '8057018224999',
+      version: ProductQueryVersion.v3,
+    ),
+    
   ];
 
   List<ProductQueryConfiguration> getConfigList() {
