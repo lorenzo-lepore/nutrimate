@@ -11,51 +11,19 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  List<ProductQueryConfiguration>? configList;
-  List<Product>? products;
-  bool isLoaded = false;
+  late List<Product>? products;
+  late bool isLoaded;
 
   @override
   void initState() {
     super.initState();
-    products = [];
-    configList = ApiService().getConfigList();
-    if (configList != null && configList!.isNotEmpty) {
-      getProducts();
-    }
-  }
-
-  getProduct() async {
-    try {
-      ProductResultV3? product =
-          await OpenFoodAPIClient.getProductV3(ApiService().getProductConfig());
-
+    isLoaded = false;
+    ApiService().getSampleProducts().then((value) {
+      products = value;
       setState(() {
         isLoaded = true;
       });
-    } catch (e) {
-      throw Exception('Errore durante il recupero dei dati');
-    }
-  }
-
-  getProducts() async {
-    try {
-      ProductResultV3? singleProduct;
-
-      for (var i = 0; i < configList!.length; i++) {
-        singleProduct = await OpenFoodAPIClient.getProductV3(configList![i]);
-
-        if (singleProduct.product != null) {
-          products?.add(singleProduct.product!);
-        }
-      }
-
-      setState(() {
-        isLoaded = true;
-      });
-    } catch (e) {
-      throw Exception('Errore durante il recupero dei dati');
-    }
+    });
   }
 
   @override
@@ -69,6 +37,7 @@ class _ProductsPageState extends State<ProductsPage> {
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
+            // Barra di ricerca
             child: const TextField(
               decoration: InputDecoration(
                 hintText: 'Cerca prodotti',
@@ -85,27 +54,8 @@ class _ProductsPageState extends State<ProductsPage> {
               ),
             ),
           ),
-          /* Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-            child: SearchAnchor(
-              builder: (BuildContext context, SearchController controller) {
-                return SearchBar(
-                  hintText: 'Cerca prodotti',
-                  elevation: const WidgetStatePropertyAll(2.0),
-                  controller: controller,
-                  onTap: () {},
-                  onChanged: (_) {},
-                  leading: const Icon(Icons.search),
-                );
-              },
-              suggestionsBuilder:
-                  (BuildContext context, SearchController controller) {
-                return const [];
-              },
-            ),
-          ), */
-
           const SizedBox(height: 16.0),
+          // Grid di prodotti
           isLoaded
               ? Expanded(
                   child: GridView.builder(

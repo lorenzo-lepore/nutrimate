@@ -18,7 +18,7 @@ class ApiService {
   }
 
   // OpenFoodFacts API related
-  List<ProductQueryConfiguration> configList = [
+  List<ProductQueryConfiguration> configSampleList = [
     ProductQueryConfiguration(
       '8000080004358',
       version: ProductQueryVersion.v3,
@@ -101,14 +101,45 @@ class ApiService {
     ),
   ];
 
-  List<ProductQueryConfiguration> getConfigList() {
-    return configList;
-  }
-
   ProductQueryConfiguration config = ProductQueryConfiguration(
     '5449000131805',
     version: ProductQueryVersion.v3,
   );
+
+  Future<Product> fetchProduct(String barcode) async {
+    ProductResultV3 productResult;    
+    ProductQueryConfiguration productConfig = ProductQueryConfiguration(
+      barcode,
+      version: ProductQueryVersion.v3,
+    );
+    try {
+      productResult = await OpenFoodAPIClient.getProductV3(productConfig);
+      return productResult.product!;
+    } catch (e) {
+      throw Exception('Errore durante il recupero dei dati');
+    }
+  }
+
+  Future<List<Product>> getSampleProducts() async {
+    ProductResultV3 singleProduct;
+    List<Product> products = [];
+    try {
+      for (var i = 0; i < configSampleList.length; i++) {
+        singleProduct = await OpenFoodAPIClient.getProductV3(configSampleList[i]);
+
+        if (singleProduct.product != null) {
+          products.add(singleProduct.product!);
+        }
+      }
+      return products;
+    } catch (e) {
+      throw Exception('Errore durante il recupero dei dati');
+    }
+  }
+
+  List<ProductQueryConfiguration> getConfigList() {
+    return configSampleList;
+  }
 
   ProductQueryConfiguration getProductConfig() {
     return config;
