@@ -20,11 +20,11 @@ class ApiService {
   // OpenFoodFacts API related
   List<ProductQueryConfiguration> configList = [
     ProductQueryConfiguration(
-      '8013355998832',
+      '8000080004358',
       version: ProductQueryVersion.v3,
     ),
     ProductQueryConfiguration(
-      '8001405000024',
+      '8715035110106',
       version: ProductQueryVersion.v3,
     ),
     ProductQueryConfiguration(
@@ -32,7 +32,7 @@ class ApiService {
       version: ProductQueryVersion.v3,
     ),
     ProductQueryConfiguration(
-      '8076809513722',
+      '8000050109007',
       version: ProductQueryVersion.v3,
     ),
     ProductQueryConfiguration(
@@ -56,7 +56,7 @@ class ApiService {
       version: ProductQueryVersion.v3,
     ),
     ProductQueryConfiguration(
-      '8001302001131',
+      '4025500105341',
       version: ProductQueryVersion.v3,
     ),
     ProductQueryConfiguration(
@@ -72,7 +72,7 @@ class ApiService {
       version: ProductQueryVersion.v3,
     ),
     ProductQueryConfiguration(
-      '8000300391961 ',
+      '8000430900231',
       version: ProductQueryVersion.v3,
     ),
     ProductQueryConfiguration(

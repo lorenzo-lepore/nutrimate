@@ -25,6 +25,12 @@ class _ProductCardState extends State<ProductCard> {
       },
       child: Card(
         color: Colors.white,
+        elevation: 1,
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(
+              color: Color.fromARGB(244, 178, 218, 94), width: 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
         clipBehavior: Clip.antiAlias,
         child: Padding(
           padding: const EdgeInsets.only(left: 4.0, right: 4.0),
@@ -37,10 +43,10 @@ class _ProductCardState extends State<ProductCard> {
                   widget.product?.imageFrontSmallUrl ??
                       'https://th.bing.com/th/id/R.be080585c0da64067404b23530a814ce?rik=vjGDbB2xFyn9Sw&riu=http%3a%2f%2fwallup.net%2fwp-content%2fuploads%2f2016%2f03%2f10%2f318375-nature-landscape-lake-mountain-forest-wildflowers-spring-pine_trees-path-Switzerland-HDR.jpg&ehk=W21nAe%2fQYSWkLQF83VxX2RflaJ7eKm%2fm0J4pW85PpjU%3d&risl=&pid=ImgRaw&r=0',
                   fit: BoxFit.scaleDown,
-                  width: 125,
-                  height: 125,
+                  width: 95,
+                  height: 95,
                 ),
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 2.0),
                 Text(
                   '${widget.product?.productName}',
                   overflow: TextOverflow.ellipsis,
@@ -48,7 +54,7 @@ class _ProductCardState extends State<ProductCard> {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 1.0),
+                const SizedBox(height: 0.5),
                 Text(
                   '${widget.product?.quantity}',
                   overflow: TextOverflow.ellipsis,

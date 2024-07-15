@@ -64,7 +64,28 @@ class _ProductsPageState extends State<ProductsPage> {
       child: Column(
         children: [
           const SizedBox(height: 8.0),
-          Padding(
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            child: const TextField(
+              decoration: InputDecoration(
+                hintText: 'Cerca prodotti',
+                contentPadding: EdgeInsets.only(left: 30.0),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Colors.black38,
+                  size: 20,
+                ),
+                prefixIconConstraints: BoxConstraints(
+                  minHeight: 15,
+                  minWidth: 25,
+                ),
+              ),
+            ),
+          ),
+          /* Padding(
             padding: const EdgeInsets.only(left: 10.0, right: 10.0),
             child: SearchAnchor(
               builder: (BuildContext context, SearchController controller) {
@@ -82,7 +103,8 @@ class _ProductsPageState extends State<ProductsPage> {
                 return const [];
               },
             ),
-          ),
+          ), */
+
           const SizedBox(height: 16.0),
           isLoaded
               ? Expanded(
@@ -103,13 +125,14 @@ class _ProductsPageState extends State<ProductsPage> {
                   ),
                 )
               : Expanded(
-                child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 1.3, // Per centrare il widget al centro della schermata
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height /
+                        1.3, // Per centrare il widget al centro della schermata
                     child: const Center(
                       child: CircularProgressIndicator(),
                     ),
                   ),
-              )
+                )
         ],
       ),
     );

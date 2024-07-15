@@ -28,10 +28,16 @@ class MyApp extends StatelessWidget {
       systemNavigationBarDividerColor: Color.fromARGB(0, 230, 34, 34),
     ));
 
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+      ),
       title: 'NutriMate',
-      home: HomeScreen(title: 'NutriMate'),
+      home: const HomeScreen(title: 'NutriMate'),
     );
   }
 }
