@@ -17,7 +17,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // OpenFoodFacts configuration
-    OpenFoodAPIConfiguration.userAgent = UserAgent(name: 'NutriMate', url: 'NoURL');
+    OpenFoodAPIConfiguration.userAgent =
+        UserAgent(name: 'NutriMate', url: 'NoURL');
     OpenFoodAPIConfiguration.globalCountry = OpenFoodFactsCountry.ITALY;
     OpenFoodAPIConfiguration.globalLanguages = <OpenFoodFactsLanguage>[
       OpenFoodFactsLanguage.ITALIAN
@@ -31,14 +32,13 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'NutriMate',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(244, 178, 218, 94),
-          brightness: Brightness.light,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
         ),
-        useMaterial3: true,
+        scaffoldBackgroundColor: Colors.white,
       ),
+      title: 'NutriMate',
       home: const HomeScreen(title: 'NutriMate'),
     );
   }

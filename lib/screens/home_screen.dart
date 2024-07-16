@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
             widget.title,
             style: GoogleFonts.kadwa(
               color: Colors.black,
-              fontSize: 32.0 /* 40.0 */,
+              fontSize: 32.0,
             ),
           ),
         ),

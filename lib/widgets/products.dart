@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nutrimate/services/api_service.dart';
 import 'package:nutrimate/widgets/card.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -11,105 +13,136 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  List<ProductQueryConfiguration>? configList;
-  List<Product>? products;
-  bool isLoaded = false;
+  late List<Product>? products;
+  late bool isLoaded;
+  late bool showNotFoundSVG;
 
   @override
   void initState() {
     super.initState();
-    products = [];
-    configList = ApiService().getConfigList();
-    if (configList != null && configList!.isNotEmpty) {
-      getProducts();
-    }
-  }
-
-  getProduct() async {
-    try {
-      ProductResultV3? product =
-          await OpenFoodAPIClient.getProductV3(ApiService().getProductConfig());
-
+    showNotFoundSVG = false;
+    isLoaded = false;
+    ApiService().getSampleProducts().then((value) {
+      products = value;
       setState(() {
         isLoaded = true;
       });
-    } catch (e) {
-      throw Exception('Errore durante il recupero dei dati');
-    }
-  }
-
-  getProducts() async {
-    try {
-      ProductResultV3? singleProduct;
-
-      for (var i = 0; i < configList!.length; i++) {
-        singleProduct = await OpenFoodAPIClient.getProductV3(configList![i]);
-
-        if (singleProduct.product != null) {
-          products?.add(singleProduct.product!);
-        }
-      }
-
-      setState(() {
-        isLoaded = true;
-      });
-    } catch (e) {
-      throw Exception('Errore durante il recupero dei dati');
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          const SizedBox(height: 8.0),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-            child: SearchAnchor(
-              builder: (BuildContext context, SearchController controller) {
-                return SearchBar(
-                  hintText: 'Cerca prodotti',
-                  elevation: const WidgetStatePropertyAll(2.0),
-                  controller: controller,
-                  onTap: () {},
-                  onChanged: (_) {},
-                  leading: const Icon(Icons.search),
-                );
-              },
-              suggestionsBuilder:
-                  (BuildContext context, SearchController controller) {
-                return const [];
-              },
-            ),
+    return Column(
+      children: [
+        const SizedBox(height: 8.0),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          decoration: const BoxDecoration(
+            color: Colors.white,
           ),
-          const SizedBox(height: 16.0),
-          isLoaded
-              ? Expanded(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 15.0,
-                      mainAxisSpacing: 5.0,
+          // Barra di ricerca
+          child: TextField(
+            cursorColor: const Color.fromARGB(244, 178, 218, 94),
+            decoration: const InputDecoration(
+              focusColor: Color.fromARGB(244, 178, 218, 94),
+              fillColor: Color.fromARGB(244, 178, 218, 94),
+              hintText: 'Cerca prodotti',
+              contentPadding: EdgeInsets.only(left: 30.0),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.black38,
+                size: 20,
+              ),
+              prefixIconConstraints: BoxConstraints(
+                minHeight: 15,
+                minWidth: 25,
+              ),
+            ),
+            onChanged: (userInput) {
+              setState(() {
+                showNotFoundSVG = false;
+                isLoaded = false;
+              });
+              EasyDebounce.debounce(
+                'search-bar',
+                const Duration(milliseconds: 1000),
+                () async {
+                  if (userInput.isNotEmpty) {
+                    setState(() {
+                      isLoaded = false;
+                    });
+                    products = await ApiService().searchProducts(userInput);
+                    if (products != null) {
+                      setState(() {
+                        isLoaded = true;
+                      });
+                    }
+                    if (products!.isEmpty) {
+                      setState(() {
+                        isLoaded = true;
+                        showNotFoundSVG = true;
+                      });
+                    }
+                  } else {
+                    ApiService().getSampleProducts().then((value) {
+                      setState(() {
+                        products = value;
+                        isLoaded = true;
+                      });
+                    });
+                  }
+                },
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        // Grid di prodotti
+        isLoaded
+            ? (showNotFoundSVG
+                ? Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Nessun prodotto trovato',
+                          style: GoogleFonts.kadwa(
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ],
                     ),
-                    padding: const EdgeInsets.all(8.0),
-                    itemCount: products?.length ?? 0,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ProductCard(
-                        product: products?[index],
-                      );
-                    },
-                  ),
-                )
-              : SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.3,
+                  )
+                : Expanded(
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 5.0,
+                        mainAxisSpacing: 5.0,
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      itemCount: products?.length ?? 0,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ProductCard(
+                          product: products?[index],
+                        );
+                      },
+                    ),
+                  ))
+            : Expanded(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height /
+                      1.3, // Per centrare il widget al centro della schermata
                   child: const Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      color: Color.fromARGB(244, 178, 218, 94),
+                    ),
                   ),
-                )
-        ],
-      ),
+                ),
+              )
+      ],
     );
   }
 }
