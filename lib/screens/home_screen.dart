@@ -19,15 +19,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _bottomBarIndex = 2;
-  final _pageController = PageController(
-    initialPage: 2,
-  );
 
   void _onItemTapped(int index) {
     setState(() {
       _bottomBarIndex = index;
     });
-    _pageController.jumpToPage(index);
   }
 
   final List<Widget> _widgetOptions = <Widget>[
@@ -54,8 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: PageView(
-        controller: _pageController,
+      body: IndexedStack(
+        index: _bottomBarIndex,
         children: _widgetOptions,
       ),
       bottomNavigationBar: BottomNavigationBar(
