@@ -45,6 +45,7 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   logger: ^2.3.0
   shared_preferences: ^2.2.3
+  easy_debounce: ^2.0.3
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +77,8 @@ flutter:
     - assets/groceries.svg
     - assets/groceries2.svg
     - assets/groceries3.svg
+    - assets/not-found.svg
+    - assets/not-found.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

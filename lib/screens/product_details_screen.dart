@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:logger/logger.dart';
 
@@ -32,7 +33,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     fetchOrderedNutrients().then(
       (OrderedNutrients nutrients) {
         //_futureOrderedNutrients = nutrients;
-        _logger.i(nutrients.toJson());
+        // _logger.i(nutrients.toJson());
       },
     );
   }
@@ -85,7 +86,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             Text(
                               '${widget.product?.getBestProductName(OpenFoodFactsLanguage.ITALIAN)}',
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: GoogleFonts.kadwa(
                                 color: Colors.black,
                                 fontSize: 24.0,
                               ),
@@ -252,9 +253,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             backgroundColor: const Color.fromARGB(244, 178, 218, 94),
           ),
           child: const Text(
-            'Aggiungi alla lista della spesa',
+            'Aggiungi alla lista',
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontSize: 16.0,
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nutrimate/widgets/product_details.dart';
+import 'package:nutrimate/screens/product_details_screen.dart';
 import 'package:nutrimate/services/api_service.dart';
 
 class HomePage extends StatefulWidget {

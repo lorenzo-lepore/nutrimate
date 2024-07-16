@@ -137,6 +137,22 @@ class ApiService {
     }
   }
 
+  Future<List<Product>> searchProducts(String userInput) async {
+    ProductSearchQueryConfiguration configuration = ProductSearchQueryConfiguration(
+      version: ProductQueryVersion.v3,
+      parametersList: <Parameter>[
+        SearchTerms(terms: [userInput]),
+      ],
+    );
+
+    SearchResult result = await OpenFoodAPIClient.searchProducts(
+      const User(userId: '', password: ''),
+      configuration,
+    );
+
+    return result.products ?? [];
+  }
+
   List<ProductQueryConfiguration> getConfigList() {
     return configSampleList;
   }
