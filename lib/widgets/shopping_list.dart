@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nutrimate/models/shopping_list_element.dart';
 import 'package:nutrimate/providers/shopping_list_provider.dart';
-import 'package:nutrimate/widgets/item.dart';
+import 'package:nutrimate/widgets/shopping_list_item.dart';
 import 'package:provider/provider.dart';
 
 class ShoppingListPage extends StatefulWidget {
@@ -15,25 +15,22 @@ class ShoppingListPage extends StatefulWidget {
 
 class _ShoppingListPageState extends State<ShoppingListPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String productName;
-  late int productQuantity;
-  late bool isChecked;
+  late String _productName;
+  late int _productQuantity;
+  late bool _isChecked;
 
   @override
   void initState() {
     super.initState();
-    productName = '';
-    productQuantity = 0;
-    isChecked = false;
+    _productName = '';
+    _productQuantity = 0;
+    _isChecked = false;
   }
 
   void _removeFromList(ListElement item) {
     int index = context.read<ShoppingListProvider>().items.indexOf(item);
-    // print('INDICE $index');
 
     context.read<ShoppingListProvider>().removeFromList(item);
-    // print(
-    //     'ITEMS AFTER REMOVE FROM LIST ${context.read<ShoppingListProvider>().items}');
 
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -44,8 +41,6 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
           label: 'Annulla',
           onPressed: () {
             context.read<ShoppingListProvider>().insertItem(index, item);
-            // print(
-            //     'ITEMS AFTER UNDO ${context.read<ShoppingListProvider>().items.toString()}');
           },
         ),
       ),
@@ -136,7 +131,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                                   if (value == null || value.trim().isEmpty) {
                                     return 'Inserisci un nome valido';
                                   }
-                                  productName = value.trim();
+                                  _productName = value.trim();
                                   return null;
                                 },
                               ),
@@ -155,7 +150,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                                         int.tryParse(value)! <= 0) {
                                       return 'Inserisci una quantità valida';
                                     }
-                                    productQuantity = int.parse(value);
+                                    _productQuantity = int.parse(value);
                                     return null;
                                   },
                                 ),
@@ -178,10 +173,11 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                                       if (_formKey.currentState!.validate()) {
                                         context
                                             .read<ShoppingListProvider>()
-                                            .addToItemsToBuy(
+                                            .addToItemsList(
                                               ListElement(
-                                                title: productName,
-                                                quantity: productQuantity,
+                                                title: _productName,
+                                                quantity: _productQuantity,
+                                                status: false,
                                               ),
                                             );
                                         ScaffoldMessenger.of(context)

@@ -13,9 +13,9 @@ class SupermarketsPage extends StatefulWidget {
 }
 
 class _SupermarketsPageState extends State<SupermarketsPage> { 
-  late GoogleMapController mapController;
-  late LatLng devicePosition;
-  bool isLoading = true;
+  late GoogleMapController _mapController;
+  late LatLng _devicePosition;
+  bool _isLoading = true;
   final _placesAPI =
       GoogleMapsPlaces(apiKey: '${dotenv.env['MAPS_API_KEY']}');
   List<PlacesSearchResult> _placesList = [];
@@ -48,13 +48,13 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
     );
 
     setState(() {
-      devicePosition = LatLng(position.latitude, position.longitude);
-      isLoading = false;
+      _devicePosition = LatLng(position.latitude, position.longitude);
+      _isLoading = false;
     });
   }
 
   void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+    _mapController = controller;
   }
 
   Future<void> searchPlaces(String query, LatLng location) async {
@@ -177,15 +177,15 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
   void initState() {
     super.initState();
     getLocation().then((_) {
-      if (!isLoading) {
-        searchPlaces('supermarket', devicePosition);
+      if (!_isLoading) {
+        searchPlaces('supermarket', _devicePosition);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
+    return _isLoading
         ? const Center(
             child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -200,7 +200,7 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
         : GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition:
-                CameraPosition(target: devicePosition, zoom: 13.0),
+                CameraPosition(target: _devicePosition, zoom: 13.0),
             markers: _markers,
           );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nutrimate/services/api_service.dart';
-import 'package:nutrimate/widgets/card.dart';
+import 'package:nutrimate/widgets/product_card.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 
@@ -13,19 +13,19 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  late List<Product>? products;
-  late bool isLoaded;
-  late bool showNotFound;
+  late List<Product>? _products;
+  late bool _isLoaded;
+  late bool _showNotFound;
 
   @override
   void initState() {
     super.initState();
-    showNotFound = false;
-    isLoaded = false;
+    _showNotFound = false;
+    _isLoaded = false;
     ApiService().getSampleProducts().then((value) {
-      products = value;
+      _products = value;
       setState(() {
-        isLoaded = true;
+        _isLoaded = true;
       });
     });
   }
@@ -62,8 +62,8 @@ class _ProductsPageState extends State<ProductsPage> {
                 ),
                 onChanged: (userInput) {
                   setState(() {
-                    showNotFound = false;
-                    isLoaded = false;
+                    _showNotFound = false;
+                    _isLoaded = false;
                   });
                   EasyDebounce.debounce(
                     'search-bar',
@@ -71,25 +71,25 @@ class _ProductsPageState extends State<ProductsPage> {
                     () async {
                       if (userInput.isNotEmpty) {
                         setState(() {
-                          isLoaded = false;
+                          _isLoaded = false;
                         });
-                        products = await ApiService().searchProducts(userInput);
-                        if (products != null) {
+                        _products = await ApiService().searchProducts(userInput);
+                        if (_products != null) {
                           setState(() {
-                            isLoaded = true;
+                            _isLoaded = true;
                           });
                         }
-                        if (products!.isEmpty) {
+                        if (_products!.isEmpty) {
                           setState(() {
-                            isLoaded = true;
-                            showNotFound = true;
+                            _isLoaded = true;
+                            _showNotFound = true;
                           });
                         }
                       } else {
                         ApiService().getSampleProducts().then((value) {
                           setState(() {
-                            products = value;
-                            isLoaded = true;
+                            _products = value;
+                            _isLoaded = true;
                           });
                         });
                       }
@@ -100,8 +100,8 @@ class _ProductsPageState extends State<ProductsPage> {
             ),
             const SizedBox(height: 16.0),
             // Grid di prodotti
-            isLoaded
-                ? (showNotFound
+            _isLoaded
+                ? (_showNotFound
                     ? Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -125,10 +125,10 @@ class _ProductsPageState extends State<ProductsPage> {
                             mainAxisSpacing: 5.0,
                           ),
                           padding: const EdgeInsets.all(8.0),
-                          itemCount: products?.length ?? 0,
+                          itemCount: _products?.length ?? 0,
                           itemBuilder: (BuildContext context, int index) {
                             return ProductCard(
-                              product: products?[index],
+                              product: _products?[index],
                             );
                           },
                         ),

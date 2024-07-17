@@ -19,20 +19,18 @@ class _MyItemState extends State<MyItem> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _modifiedProductNameController;
   late TextEditingController _modifiedProductQuantityController;
-  late bool isChecked;
-  late String modifiedProductName;
-  late int modifiedProductQuantity;
+  late String _modifiedProductName;
+  late int _modifiedProductQuantity;
 
   @override
   void initState() {
     super.initState();
-    isChecked = false;
-    modifiedProductName = widget.item.title;
-    modifiedProductQuantity = widget.item.quantity;
+    _modifiedProductName = widget.item.title;
+    _modifiedProductQuantity = widget.item.quantity;
     _modifiedProductNameController =
-        TextEditingController(text: modifiedProductName);
+        TextEditingController(text: _modifiedProductName);
     _modifiedProductQuantityController =
-        TextEditingController(text: modifiedProductQuantity.toString());
+        TextEditingController(text: _modifiedProductQuantity.toString());
   }
 
   @override
@@ -53,14 +51,13 @@ class _MyItemState extends State<MyItem> {
           borderRadius: BorderRadius.circular(20),
         ),
         onTap: () {
-          /* Reindirizzamento su pagina dettagli prodotto (solo se il codice a barre è disponibile, altrimenti mostra uno snackbar) */
           if (widget.item.barcode == null) {
             ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 behavior: SnackBarBehavior.floating,
-                content: Text(
-                    'Dettagli non disponibili. Prodotto non tracciato.'),
+                content:
+                    Text('Dettagli non disponibili. Prodotto non tracciato.'),
                 duration: Duration(seconds: 2),
               ),
             );
@@ -89,11 +86,21 @@ class _MyItemState extends State<MyItem> {
               ),
               activeColor: Colors.green[300],
               checkColor: Colors.white,
-              value: isChecked,
+              value: context
+                  .watch<ShoppingListProvider>()
+                  .items
+                  .elementAt(context
+                      .read<ShoppingListProvider>()
+                      .items
+                      .indexOf(widget.item))
+                  .status,
               onChanged: (bool? value) {
-                setState(() {
-                  isChecked = value!;
-                });
+                context.read<ShoppingListProvider>().changeItemStatus(
+                      context
+                          .read<ShoppingListProvider>()
+                          .items
+                          .indexOf(widget.item),
+                    );
               },
             ),
           ),
@@ -101,15 +108,31 @@ class _MyItemState extends State<MyItem> {
         title: Text(
           widget.item.title,
           style: GoogleFonts.kadwa(
-            decoration:
-                isChecked ? TextDecoration.lineThrough : TextDecoration.none,
+            decoration: context
+                    .watch<ShoppingListProvider>()
+                    .items
+                    .elementAt(context
+                        .read<ShoppingListProvider>()
+                        .items
+                        .indexOf(widget.item))
+                    .status
+                ? TextDecoration.lineThrough
+                : TextDecoration.none,
           ),
         ),
         subtitle: Text(
           'Quantità: ${widget.item.quantity}',
           style: GoogleFonts.kadwa(
-            decoration:
-                isChecked ? TextDecoration.lineThrough : TextDecoration.none,
+            decoration: context
+                    .watch<ShoppingListProvider>()
+                    .items
+                    .elementAt(context
+                        .read<ShoppingListProvider>()
+                        .items
+                        .indexOf(widget.item))
+                    .status
+                ? TextDecoration.lineThrough
+                : TextDecoration.none,
           ),
         ),
         trailing: Padding(
@@ -147,7 +170,7 @@ class _MyItemState extends State<MyItem> {
                                           value.trim().isEmpty) {
                                         return 'Inserisci un nome valido';
                                       }
-                                      modifiedProductName = value.trim();
+                                      _modifiedProductName = value.trim();
                                       return null;
                                     },
                                   ),
@@ -168,7 +191,7 @@ class _MyItemState extends State<MyItem> {
                                             int.tryParse(value)! <= 0) {
                                           return 'Inserisci una quantità valida';
                                         }
-                                        modifiedProductQuantity =
+                                        _modifiedProductQuantity =
                                             int.parse(value);
                                         return null;
                                       },
@@ -199,9 +222,9 @@ class _MyItemState extends State<MyItem> {
                                                           ShoppingListProvider>()
                                                       .items
                                                       .indexOf(widget.item),
-                                                  title: modifiedProductName,
+                                                  title: _modifiedProductName,
                                                   quantity:
-                                                      modifiedProductQuantity,
+                                                      _modifiedProductQuantity,
                                                 );
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(

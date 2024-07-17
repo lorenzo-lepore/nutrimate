@@ -2,8 +2,9 @@ class ListElement {
   String title;
   String? barcode;
   int quantity;
+  bool status;
 
-  ListElement({required this.title, required this.quantity, this.barcode});
+  ListElement({required this.title, required this.quantity, required this.status, this.barcode});
 
   @override
   String toString() {

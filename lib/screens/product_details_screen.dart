@@ -241,11 +241,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            context.read<ShoppingListProvider>().addToItemsToBuy(
+            context.read<ShoppingListProvider>().addToItemsList(
                   ListElement(
                     title: _productName,
                     quantity: 1,
                     barcode: _productBarcode,
+                    status: false,
                   ),
                 );
             Navigator.pop(context);
