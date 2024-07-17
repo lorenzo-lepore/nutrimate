@@ -2,7 +2,6 @@ import 'package:nutrimate/widgets/shopping_list.dart';
 import 'package:nutrimate/widgets/products.dart';
 import 'package:nutrimate/widgets/scanner.dart';
 import 'package:nutrimate/widgets/supermarkets.dart';
-import 'package:nutrimate/widgets/user.dart';
 
 import 'package:flutter/material.dart';
 
@@ -37,7 +36,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: const Color.fromARGB(255, 188, 185, 190),
+            height: 1.0,
+          ),
+        ),
         scrolledUnderElevation: 0.0,
         centerTitle: true,
         title: Container(
@@ -49,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
               fontSize: 32.0,
             ),
           ),
+
         ),
       ),
       body: IndexedStack(
@@ -79,10 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.barcode_reader),
             label: 'Scanner',
           ),
-          /* BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profilo',
-          ), */
         ],
         currentIndex: _bottomBarIndex,
         onTap: (index) {

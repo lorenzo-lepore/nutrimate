@@ -1,5 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'providers/shopping_list_provider.dart';
 
 import './screens/home_screen.dart';
 
@@ -30,16 +32,23 @@ class MyApp extends StatelessWidget {
       systemNavigationBarDividerColor: Color.fromARGB(0, 230, 34, 34),
     ));
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ShoppingListProvider(),
         ),
-        scaffoldBackgroundColor: Colors.white,
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white,
+          ),
+          scaffoldBackgroundColor: Colors.white,
+        ),
+        title: 'NutriMate',
+        home: const HomeScreen(title: 'NutriMate'),
       ),
-      title: 'NutriMate',
-      home: const HomeScreen(title: 'NutriMate'),
     );
   }
 }
