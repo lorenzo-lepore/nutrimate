@@ -90,6 +90,7 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
                     barrierDismissible: false,
                     builder: (context) {
                       return AlertDialog(
+                        backgroundColor: Colors.white,
                         title: Text(
                           place.name,
                           textAlign: TextAlign.center,

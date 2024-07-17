@@ -35,4 +35,18 @@ class ShoppingListProvider extends ChangeNotifier {
       throw Exception('Rimozione fallita: $e');
     }
   }
+
+  void modifyItemDetails(int index, {String? title, int? quantity}) {
+    try {
+      if (title != null) {
+        items[index].title = title;
+      }
+      if (quantity != null) {
+        items[index].quantity = quantity;
+      }
+      notifyListeners();
+    } catch (e) {
+      throw Exception('Modifica fallita: $e');
+    }
+  }
 }

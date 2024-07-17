@@ -60,7 +60,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
           padding: const EdgeInsets.all(8.0),
           child: context.watch<ShoppingListProvider>().items.isEmpty
               ? Center(
-                child: Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SvgPicture.asset(
@@ -81,7 +81,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                       ),
                     ],
                   ),
-              )
+                )
               : SingleChildScrollView(
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -117,7 +117,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                 builder: (context) {
                   return AlertDialog(
                     backgroundColor: Colors.white,
-                    title: Text('Aggiungi prodotto',
+                    title: Text('Aggiungi prodotto non tracciato',
                         style: GoogleFonts.kadwa(),
                         textAlign: TextAlign.center),
                     content: Column(
@@ -129,26 +129,30 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                             children: [
                               TextFormField(
                                 decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
                                   labelText: 'Nome prodotto',
                                 ),
                                 validator: (String? value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Inserisci un nome';
+                                  if (value == null || value.trim().isEmpty) {
+                                    return 'Inserisci un nome valido';
                                   }
-                                  productName = value;
+                                  productName = value.trim();
                                   return null;
                                 },
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 22.0),
                                 child: TextFormField(
+                                  keyboardType: TextInputType.number,
                                   decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
                                     labelText: 'Quantità',
                                   ),
                                   validator: (String? value) {
                                     if (value == null ||
                                         value.isEmpty ||
-                                        int.tryParse(value) == null) {
+                                        int.tryParse(value) == null ||
+                                        int.tryParse(value)! <= 0) {
                                       return 'Inserisci una quantità valida';
                                     }
                                     productQuantity = int.parse(value);
