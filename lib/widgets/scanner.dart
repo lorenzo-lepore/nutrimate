@@ -13,12 +13,12 @@ class _ScannerPageState extends State<ScannerPage> {
   late CameraController cameraController;
   bool isCameraInitialized = false;
 
-  @override
+  /* @override
   void initState() {
     super.initState();
     startCamera();
   }
-
+ */
   void startCamera() async {
     cameras = await availableCameras();
 
@@ -53,7 +53,7 @@ class _ScannerPageState extends State<ScannerPage> {
 
   @override
   Widget build(BuildContext context) {
-      return Expanded(
+      return const Text('Scanner Page');/* Expanded(
         child: isCameraInitialized 
           ? AspectRatio(
             aspectRatio: cameraController.value.aspectRatio,
@@ -61,5 +61,6 @@ class _ScannerPageState extends State<ScannerPage> {
           )
         : const Center(child: CircularProgressIndicator()),
       );
-  }
+  } */
+ }
 }

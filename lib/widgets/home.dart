@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nutrimate/screens/product_details_screen.dart';
-import 'package:nutrimate/services/api_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, this.listElements = const ['DAJE ROMA']});
@@ -14,15 +12,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final String assetName = 'assets/groceries3.svg';
   final List<String> listElements = [
-    '8057018224999',
+    /* '8057018224999',
     '8057018224990',
     '8057018224998',
     '8057018224994',
     '8057018224992',
     '8057018224991',
-    '8057018224993',
+    '8057018224993', */
   ];
 
   @override
@@ -35,7 +32,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
-                    assetName,
+                    'assets/groceries3.svg',
                     height: 300.0,
                     width: 300.0,
                   ),

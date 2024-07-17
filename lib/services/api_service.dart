@@ -1,23 +1,6 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:nutrimate/models/album.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 
 class ApiService {
-  // Example of a simple HTTP request
-  final String baseUrl = 'https://jsonplaceholder.typicode.com';
-
-  Future<Album> fetchAlbum() async {
-    final response = await http.get(Uri.parse('$baseUrl/albums/1'));
-
-    if (response.statusCode == 200) {
-      return Album.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-    } else {
-      throw Exception('Failed to load album');
-    }
-  }
-
-  // OpenFoodFacts API related
   List<ProductQueryConfiguration> configSampleList = [
     ProductQueryConfiguration(
       '8000080004358',

@@ -15,12 +15,12 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   late List<Product>? products;
   late bool isLoaded;
-  late bool showNotFoundSVG;
+  late bool showNotFound;
 
   @override
   void initState() {
     super.initState();
-    showNotFoundSVG = false;
+    showNotFound = false;
     isLoaded = false;
     ApiService().getSampleProducts().then((value) {
       products = value;
@@ -60,7 +60,7 @@ class _ProductsPageState extends State<ProductsPage> {
             ),
             onChanged: (userInput) {
               setState(() {
-                showNotFoundSVG = false;
+                showNotFound = false;
                 isLoaded = false;
               });
               EasyDebounce.debounce(
@@ -80,7 +80,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     if (products!.isEmpty) {
                       setState(() {
                         isLoaded = true;
-                        showNotFoundSVG = true;
+                        showNotFound = true;
                       });
                     }
                   } else {
@@ -99,7 +99,7 @@ class _ProductsPageState extends State<ProductsPage> {
         const SizedBox(height: 16.0),
         // Grid di prodotti
         isLoaded
-            ? (showNotFoundSVG
+            ? (showNotFound
                 ? Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
