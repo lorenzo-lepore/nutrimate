@@ -19,7 +19,10 @@ class _ProductCardState extends State<ProductCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductDetailsPage(product: widget.product),
+            builder: (context) => ProductDetailsPage(
+              product: widget.product,
+              showAddButton: true,
+            ),
           ),
         );
       },
@@ -29,7 +32,6 @@ class _ProductCardState extends State<ProductCard> {
         shape: RoundedRectangleBorder(
           side: const BorderSide(
               color: Color.fromARGB(255, 173, 173, 173), width: 1.2),
-              // color: Color.fromARGB(244, 178, 218, 94), width: 0.5),
           borderRadius: BorderRadius.circular(10),
         ),
         clipBehavior: Clip.antiAlias,
@@ -41,7 +43,7 @@ class _ProductCardState extends State<ProductCard> {
               const SizedBox(height: 8.0),
               Image.network(
                 widget.product?.imageFrontSmallUrl ??
-                    'https://th.bing.com/th/id/R.be080585c0da64067404b23530a814ce?rik=vjGDbB2xFyn9Sw&riu=http%3a%2f%2fwallup.net%2fwp-content%2fuploads%2f2016%2f03%2f10%2f318375-nature-landscape-lake-mountain-forest-wildflowers-spring-pine_trees-path-Switzerland-HDR.jpg&ehk=W21nAe%2fQYSWkLQF83VxX2RflaJ7eKm%2fm0J4pW85PpjU%3d&risl=&pid=ImgRaw&r=0',
+                    'https://s3-cdn.cmlabs.co/page/2023/01/24/a-guideline-on-how-to-fix-error-404-not-found-effectively-519451.png',
                 fit: BoxFit.scaleDown,
                 width: 95,
                 height: 95,

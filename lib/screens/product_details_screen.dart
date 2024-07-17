@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
+import 'package:nutrimate/providers/shopping_list_provider.dart';
+import 'package:nutrimate/models/shopping_list_element.dart';
 
 class ProductDetailsPage extends StatefulWidget {
-  const ProductDetailsPage({super.key, required this.product});
+  const ProductDetailsPage({super.key, required this.product, required this.showAddButton});
 
   final Product? product;
+  final bool showAddButton;
 
   @override
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
@@ -16,11 +20,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   late Logger _logger;
   late Map<String, String> _nutriments;
   late OrderedNutrients _futureOrderedNutrients;
+  late String _productName;
+  late String _productBarcode;
 
   Future<OrderedNutrients> fetchOrderedNutrients() async {
-    final OrderedNutrients nutrients = await OpenFoodAPIClient.getOrderedNutrients(
-        country: OpenFoodFactsCountry.ITALY,
-        language: OpenFoodFactsLanguage.ITALIAN,
+    final OrderedNutrients nutrients =
+        await OpenFoodAPIClient.getOrderedNutrients(
+      country: OpenFoodFactsCountry.ITALY,
+      language: OpenFoodFactsLanguage.ITALIAN,
     );
     return nutrients;
   }
@@ -29,11 +36,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   void initState() {
     super.initState();
     _logger = Logger();
+    _productName =
+        widget.product!.getBestProductName(OpenFoodFactsLanguage.ITALIAN);
+    _productBarcode = widget.product!.barcode!;
     _nutriments = widget.product?.nutriments?.toData() ?? {};
     fetchOrderedNutrients().then(
       (OrderedNutrients nutrients) {
-        //_futureOrderedNutrients = nutrients;
-        // _logger.i(nutrients.toJson());
       },
     );
   }
@@ -72,7 +80,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           ),
                           const SizedBox(height: 8.0),
                           Text(
-                            '${widget.product?.getBestProductName(OpenFoodFactsLanguage.ITALIAN)}',
+                            _productName,
                             textAlign: TextAlign.center,
                             style: GoogleFonts.kadwa(
                               color: Colors.black,
@@ -102,7 +110,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                         fontSize: 14.0),
                                   ),
                                   TextSpan(
-                                    text: '${widget.product?.barcode}',
+                                    text: _productBarcode,
                                     style: const TextStyle(fontSize: 12.0),
                                   ),
                                 ]),
@@ -229,11 +237,25 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
+      bottomNavigationBar: widget.showAddButton ? Padding(
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
+            context.read<ShoppingListProvider>().addToItemsToBuy(
+                  ListElement(
+                    title: _productName,
+                    quantity: 1,
+                    barcode: _productBarcode,
+                  ),
+                );
             Navigator.pop(context);
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                behavior: SnackBarBehavior.floating,
+                content: Text('Prodotto aggiunto con successo alla lista.'),
+              ),
+            );
           },
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(double.infinity, 51.0),
@@ -247,7 +269,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             ),
           ),
         ),
-      ),
+      ) : null,
     );
   }
 }

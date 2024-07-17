@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nutrimate/models/shopping_list_element.dart';
+import 'package:nutrimate/providers/shopping_list_provider.dart';
 import 'package:nutrimate/widgets/item.dart';
+import 'package:provider/provider.dart';
 
 class ShoppingListPage extends StatefulWidget {
-  const ShoppingListPage({super.key, this.listElements = const ['DAJE ROMA']});
-
-  final List<String> listElements;
+  const ShoppingListPage({super.key});
 
   @override
   State<ShoppingListPage> createState() => _ShoppingListPageState();
@@ -15,20 +15,6 @@ class ShoppingListPage extends StatefulWidget {
 
 class _ShoppingListPageState extends State<ShoppingListPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final List<ListElement> itemsToBuy = [
-    ListElement(title: 'Pasta', quantity: 1),
-    ListElement(title: 'Riso', quantity: 1),
-    ListElement(title: 'Latte', quantity: 1),
-    ListElement(title: 'Pane', quantity: 1),
-    ListElement(title: 'Uova', quantity: 1),
-    ListElement(title: 'Pomodori', quantity: 1),
-    ListElement(title: 'Cipolle', quantity: 1),
-    ListElement(title: 'Patate', quantity: 1),
-    ListElement(title: 'Carne', quantity: 1),
-    ListElement(title: 'Pesce', quantity: 1),
-    ListElement(title: 'Frutta', quantity: 1),
-    ListElement(title: 'Verdura', quantity: 1),
-  ];
   late String productName;
   late int productQuantity;
   late bool isChecked;
@@ -41,23 +27,13 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
     isChecked = false;
   }
 
-  void _addToItemsToBuy(ListElement item) {
-    setState(() {
-      itemsToBuy.add(item);
-    });
-  }
-
   void _removeFromList(ListElement item) {
-    final int index;
+    int index = context.read<ShoppingListProvider>().items.indexOf(item);
+    // print('INDICE $index');
 
-    try {
-      index = itemsToBuy.indexOf(item);
-      setState(() {
-        itemsToBuy.remove(item);
-      });
-    } catch (e) {
-      throw Exception('Rimozione fallita: $e');
-    }
+    context.read<ShoppingListProvider>().removeFromList(item);
+    // print(
+    //     'ITEMS AFTER REMOVE FROM LIST ${context.read<ShoppingListProvider>().items}');
 
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -67,9 +43,9 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
         action: SnackBarAction(
           label: 'Annulla',
           onPressed: () {
-            setState(() {
-              itemsToBuy.insert(index, item);
-            });
+            context.read<ShoppingListProvider>().insertItem(index, item);
+            // print(
+            //     'ITEMS AFTER UNDO ${context.read<ShoppingListProvider>().items.toString()}');
           },
         ),
       ),
@@ -82,41 +58,49 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: itemsToBuy.isEmpty
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/groceries3.svg',
-                      height: 300.0,
-                      width: 300.0,
-                    ),
-                    Text(
-                      'lista vuota',
-                      style: GoogleFonts.nunito(
-                          color: Colors.black, fontSize: 32.0),
-                    ),
-                    const Text(
-                      'La tua lista è vuota. Aggiungi dei prodotti manualmente o scannerizzandoli.',
-                      style: TextStyle(fontSize: 16.0),
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                )
+          child: context.watch<ShoppingListProvider>().items.isEmpty
+              ? Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/groceries3.svg',
+                        height: 300.0,
+                        width: 300.0,
+                      ),
+                      Text(
+                        'lista vuota',
+                        style: GoogleFonts.nunito(
+                            color: Colors.black, fontSize: 32.0),
+                      ),
+                      const Text(
+                        'La tua lista è vuota. Aggiungi dei prodotti manualmente o scannerizzandoli.',
+                        style: TextStyle(fontSize: 16.0),
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+              )
               : SingleChildScrollView(
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.all(10),
-                    itemCount: itemsToBuy.length,
+                    itemCount:
+                        context.watch<ShoppingListProvider>().items.length,
                     itemBuilder: (context, index) {
                       return Dismissible(
                         key: UniqueKey(),
                         onDismissed: (direction) => {
-                          _removeFromList(itemsToBuy[index]),
+                          _removeFromList(context
+                              .read<ShoppingListProvider>()
+                              .items[index]),
                         },
-                        child: MyItem(item: itemsToBuy[index]),
+                        child: MyItem(
+                            item: context
+                                .watch<ShoppingListProvider>()
+                                .items[index]),
                       );
                     },
                   ),
@@ -188,12 +172,14 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                                     ),
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
-                                        _addToItemsToBuy(
-                                          ListElement(
-                                            title: productName,
-                                            quantity: productQuantity,
-                                          ),
-                                        );
+                                        context
+                                            .read<ShoppingListProvider>()
+                                            .addToItemsToBuy(
+                                              ListElement(
+                                                title: productName,
+                                                quantity: productQuantity,
+                                              ),
+                                            );
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(

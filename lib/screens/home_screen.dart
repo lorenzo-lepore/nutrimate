@@ -2,7 +2,6 @@ import 'package:nutrimate/widgets/shopping_list.dart';
 import 'package:nutrimate/widgets/products.dart';
 import 'package:nutrimate/widgets/scanner.dart';
 import 'package:nutrimate/widgets/supermarkets.dart';
-import 'package:nutrimate/widgets/user.dart';
 
 import 'package:flutter/material.dart';
 
@@ -88,10 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.barcode_reader),
             label: 'Scanner',
           ),
-          /* BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profilo',
-          ), */
         ],
         currentIndex: _bottomBarIndex,
         onTap: (index) {

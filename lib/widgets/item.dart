@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nutrimate/models/shopping_list_element.dart';
+import 'package:nutrimate/providers/shopping_list_provider.dart';
+import 'package:nutrimate/services/api_service.dart';
+import 'package:provider/provider.dart';
+import 'package:nutrimate/screens/product_details_screen.dart';
 
 class MyItem extends StatefulWidget {
   const MyItem({super.key, required this.item});
@@ -12,19 +16,12 @@ class MyItem extends StatefulWidget {
 }
 
 class _MyItemState extends State<MyItem> {
-  final Color _iconColorDefault = Colors.grey[700]!;
-  final Color _iconColorPinned = Colors.amberAccent[700]!;
-  
   late bool isChecked;
-  late bool isPinned;
-  late Color _iconColor;
 
   @override
   void initState() {
     super.initState();
     isChecked = false;
-    isPinned = false;
-    _iconColor = isPinned ? _iconColorPinned : _iconColorDefault;
   }
 
   @override
@@ -39,14 +36,27 @@ class _MyItemState extends State<MyItem> {
         ),
         onTap: () {
           /* Reindirizzamento su pagina dettagli prodotto (solo se il codice a barre è disponibile, altrimenti mostra uno snackbar) */
-          /* Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProductDetailsPage(
-                product: listProducts[index],
+          if (widget.item.barcode == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Dettagli non disponibili. Codice a barre non presente.'),
+                duration: Duration(seconds: 2),
               ),
-            ),
-          ); */
+            );
+            return;
+          } else {
+            ApiService().fetchProduct(widget.item.barcode!).then((value) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailsPage(
+                    product: value,
+                    showAddButton: false,
+                  ),
+                ),
+              );
+            });
+          }
         },
         leading: Padding(
           padding: const EdgeInsets.only(left: 12.0),
@@ -81,15 +91,15 @@ class _MyItemState extends State<MyItem> {
                 isChecked ? TextDecoration.lineThrough : TextDecoration.none,
           ),
         ),
-        trailing: Padding(padding: const EdgeInsets.only(right: 20.0),
-        child: IconButton(
-          icon: const Icon(Icons.push_pin),
-          color: _iconColor,
-          onPressed: () {
-            setState(() {
-            });
-          },
-        )),
+        trailing: Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: IconButton(
+              icon: const Icon(Icons.edit),
+              color: Colors.grey[700],
+              onPressed: () {
+                setState(() {});
+              },
+            )),
       ),
     );
   }
