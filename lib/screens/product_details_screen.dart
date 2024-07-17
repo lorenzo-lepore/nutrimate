@@ -242,7 +242,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           child: const Text(
             'Aggiungi alla lista',
             style: TextStyle(
-              color: Colors.white,
+              color: Color.fromARGB(255, 82, 100, 45),
               fontSize: 16.0,
             ),
           ),

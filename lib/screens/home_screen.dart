@@ -37,7 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: const Color.fromARGB(255, 188, 185, 190),
+            height: 1.0,
+          ),
+        ),
         scrolledUnderElevation: 0.0,
         centerTitle: true,
         title: Container(
@@ -49,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
               fontSize: 32.0,
             ),
           ),
+
         ),
       ),
       body: IndexedStack(

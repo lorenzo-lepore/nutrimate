@@ -14,20 +14,7 @@ class ShoppingListPage extends StatefulWidget {
 }
 
 class _ShoppingListPageState extends State<ShoppingListPage> {
-  final List<String> listElements = [
-    /* '8057018224999',
-    '8057018224990',
-    '8057018224998',
-    '8057018224994',
-    '8057018224992',
-    '8057018224991',
-    '8057018224993', */
-  ];
-
-  /* DEV-SHOPPING-LIST */
-
-  bool isChecked = false;
-  final List<ListElement> boughtItems = [];
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final List<ListElement> itemsToBuy = [
     ListElement(title: 'Pasta', quantity: 1),
     ListElement(title: 'Riso', quantity: 1),
@@ -42,6 +29,17 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
     ListElement(title: 'Frutta', quantity: 1),
     ListElement(title: 'Verdura', quantity: 1),
   ];
+  late String productName;
+  late int productQuantity;
+  late bool isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    productName = '';
+    productQuantity = 0;
+    isChecked = false;
+  }
 
   void _addToItemsToBuy(ListElement item) {
     setState(() {
@@ -49,34 +47,22 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
     });
   }
 
-  void _addToBoughtItems(int index) {
-    setState(() {
-      boughtItems.add(itemsToBuy[index]);
-      itemsToBuy.removeAt(index);
-    });
-  }
-
-  // 0: Lista degli elementi da acquistare - 1: Lista degli elementi acquistati
-  void _removeFromList(ListElement item, int typeOfList) {
+  void _removeFromList(ListElement item) {
     final int index;
 
-    if (typeOfList == 0) {
+    try {
       index = itemsToBuy.indexOf(item);
       setState(() {
         itemsToBuy.remove(item);
       });
-    } else if (typeOfList == 1) {
-      index = boughtItems.indexOf(item);
-      setState(() {
-        boughtItems.remove(item);
-      });
-    } else {
-      throw Exception('Tipo di lista non valido');
+    } catch (e) {
+      throw Exception('Rimozione fallita: $e');
     }
 
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        behavior: SnackBarBehavior.floating,
         content: Text('${item.title} rimosso dalla lista'),
         action: SnackBarAction(
           label: 'Annulla',
@@ -90,45 +76,36 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
     );
   }
 
-  /* END-DEV-SHOPPING-LIST */
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: itemsToBuy.isEmpty
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/groceries3.svg',
-                  height: 300.0,
-                  width: 300.0,
-                ),
-                Text(
-                  'lista vuota',
-                  style:
-                      GoogleFonts.nunito(color: Colors.black, fontSize: 32.0),
-                ),
-                const Text(
-                  'La tua lista è vuota. Aggiungi dei prodotti manualmente o scannerizzandoli.',
-                  style: TextStyle(fontSize: 16.0),
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            )
-          : SingleChildScrollView(
-              child: Column(
-                children: [
-                  /* const SizedBox(height: 10),
-                  const Text(
-                    'Da acquistare',
-                    style:
-                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ), // Aggiungi il tuo testo qui
-                  const SizedBox(height: 10), */
-                  ListView.builder(
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: itemsToBuy.isEmpty
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/groceries3.svg',
+                      height: 300.0,
+                      width: 300.0,
+                    ),
+                    Text(
+                      'lista vuota',
+                      style: GoogleFonts.nunito(
+                          color: Colors.black, fontSize: 32.0),
+                    ),
+                    const Text(
+                      'La tua lista è vuota. Aggiungi dei prodotti manualmente o scannerizzandoli.',
+                      style: TextStyle(fontSize: 16.0),
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                )
+              : SingleChildScrollView(
+                  child: ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.all(10),
@@ -137,47 +114,118 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                       return Dismissible(
                         key: UniqueKey(),
                         onDismissed: (direction) => {
-                          _removeFromList(itemsToBuy[index], 0),
+                          _removeFromList(itemsToBuy[index]),
                         },
                         child: MyItem(item: itemsToBuy[index]),
                       );
                     },
                   ),
-                  Visibility(
-                      visible: boughtItems.isNotEmpty,
-                      child: const SizedBox(height: 10)),
-                  Visibility(
-                    visible: boughtItems.isNotEmpty,
-                    child: const Text(
-                      'Acquistati',
-                      style: TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+        ),
+        Positioned(
+          bottom: 16.0,
+          right: 16.0,
+          child: FloatingActionButton(
+            backgroundColor: const Color.fromARGB(244, 178, 218, 94),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: Text('Aggiungi prodotto',
+                        style: GoogleFonts.kadwa(),
+                        textAlign: TextAlign.center),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                decoration: const InputDecoration(
+                                  labelText: 'Nome prodotto',
+                                ),
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Inserisci un nome';
+                                  }
+                                  productName = value;
+                                  return null;
+                                },
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 22.0),
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Quantità',
+                                  ),
+                                  validator: (String? value) {
+                                    if (value == null ||
+                                        value.isEmpty ||
+                                        int.tryParse(value) == null) {
+                                      return 'Inserisci una quantità valida';
+                                    }
+                                    productQuantity = int.parse(value);
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 22.0),
+                                child: ButtonTheme(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          244, 178, 218, 94),
+                                    ),
+                                    child: const Text(
+                                      'Aggiungi',
+                                      style: TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 82, 100, 45)),
+                                    ),
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        _addToItemsToBuy(
+                                          ListElement(
+                                            title: productName,
+                                            quantity: productQuantity,
+                                          ),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Text('Prodotto aggiunto'),
+                                          ),
+                                        );
+                                        Navigator.pop(context);
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ), // Aggiungi il tuo testo qui
-                  Visibility(
-                      visible: boughtItems.isNotEmpty,
-                      child: const SizedBox(height: 10)),
-                  Visibility(
-                    visible: boughtItems.isNotEmpty,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(10),
-                      itemCount: boughtItems.length,
-                      itemBuilder: (context, index) {
-                        return Dismissible(
-                          key: UniqueKey(),
-                          onDismissed: (direction) => {
-                            _removeFromList(boughtItems[index], 1),
-                          },
-                          child: MyItem(item: boughtItems[index]),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                  );
+                },
+              );
+            },
+            child: Transform.scale(
+              scale: 1.2,
+              child: const Icon(
+                Icons.add,
+                color: Color.fromARGB(255, 82, 100, 45),
               ),
             ),
+          ),
+        ),
+      ],
     );
   }
 }

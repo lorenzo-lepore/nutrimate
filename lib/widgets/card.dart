@@ -28,7 +28,8 @@ class _ProductCardState extends State<ProductCard> {
         elevation: 1,
         shape: RoundedRectangleBorder(
           side: const BorderSide(
-              color: Color.fromARGB(244, 178, 218, 94), width: 1.5),
+              color: Color.fromARGB(255, 173, 173, 173), width: 1.2),
+              // color: Color.fromARGB(244, 178, 218, 94), width: 0.5),
           borderRadius: BorderRadius.circular(10),
         ),
         clipBehavior: Clip.antiAlias,

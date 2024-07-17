@@ -38,6 +38,7 @@ class _MyItemState extends State<MyItem> {
           borderRadius: BorderRadius.circular(20),
         ),
         onTap: () {
+          /* Reindirizzamento su pagina dettagli prodotto (solo se il codice a barre è disponibile, altrimenti mostra uno snackbar) */
           /* Navigator.push(
             context,
             MaterialPageRoute(
@@ -80,57 +81,15 @@ class _MyItemState extends State<MyItem> {
                 isChecked ? TextDecoration.lineThrough : TextDecoration.none,
           ),
         ),
-        trailing: Padding(padding: EdgeInsets.only(right: 20.0),
+        trailing: Padding(padding: const EdgeInsets.only(right: 20.0),
         child: IconButton(
           icon: const Icon(Icons.push_pin),
           color: _iconColor,
           onPressed: () {
             setState(() {
-             
             });
-            /* setState(() {
-              itemsToBuy.removeAt(index);
-            }); */
           },
         )),
-        /* trailing: Padding(
-          padding: const EdgeInsets.only(right: 30.0),
-          child: SizedBox(
-            width: 106,
-            child: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.remove),
-                  color: Colors.black54,
-                  onPressed: () {
-                    setState(() {
-                      if (widget.item.quantity > 1) {
-                        widget.item.quantity--;
-                      }
-                    });
-                  },
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  widget.item.quantity.toString(),
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  color: Colors.black54,
-                  onPressed: () {
-                    setState(() {
-                      if (widget.item.quantity < 9) {
-                        widget.item.quantity++;
-                      }
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-        ), */
       ),
     );
   }
