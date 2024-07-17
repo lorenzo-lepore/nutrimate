@@ -1,4 +1,4 @@
-import 'package:nutrimate/widgets/home.dart';
+import 'package:nutrimate/widgets/shopping_list.dart';
 import 'package:nutrimate/widgets/products.dart';
 import 'package:nutrimate/widgets/scanner.dart';
 import 'package:nutrimate/widgets/supermarkets.dart';
@@ -29,9 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _widgetOptions = <Widget>[
     const SupermarketsPage(),
     const ProductsPage(),
-    const HomePage(),
+    const ShoppingListPage(),
     const ScannerPage(),
-    const UserPage()
+    // const UserPage()
   ];
 
   @override
@@ -79,10 +79,10 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.barcode_reader),
             label: 'Scanner',
           ),
-          BottomNavigationBarItem(
+          /* BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profilo',
-          ),
+          ), */
         ],
         currentIndex: _bottomBarIndex,
         onTap: (index) {
