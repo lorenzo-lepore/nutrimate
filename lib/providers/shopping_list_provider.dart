@@ -17,6 +17,10 @@ class ShoppingListProvider extends ChangeNotifier {
     ListElement(title: 'Verdura', quantity: 1, status: false),
   ];
 
+  /* Future<void> loadItemsFromDatabase() async {
+    final db = await DatabaseService.instance;
+  } */
+
   void insertItem(int index, ListElement item) {
     items.insert(index, item);
     notifyListeners();

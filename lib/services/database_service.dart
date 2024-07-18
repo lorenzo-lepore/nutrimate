@@ -1,10 +1,11 @@
+import 'package:nutrimate/models/shopping_list_element.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseService {
   static Database? _db;
   static final DatabaseService instance = DatabaseService._constructor();
 
-  final String _nutrimateTableName = 'products';
+  final String _nutrimateTableName = 'items';
   final String _nutrimateIdColumnName = 'id';
   final String _nutrimateBarcodeColumnName = 'barcode';
   final String _nutrimateNameColumnName = 'name';
@@ -39,5 +40,15 @@ class DatabaseService {
       },
     );
     return database;
+  }
+
+  void addItem(ListElement element) async {
+    final db = await database;
+    await db.insert(_nutrimateTableName, {
+      _nutrimateNameColumnName: element.title,
+      _nutrimateQuantityColumnName: element.quantity.toString(),
+      _nutrimateStatusColumnName: element.status ? '1' : '0',
+      _nutrimateBarcodeColumnName: element.barcode,
+    });
   }
 }
