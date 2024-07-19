@@ -1,9 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'providers/shopping_list_provider.dart';
+import 'provider/shopping_list_provider.dart';
 
-import './screens/home_screen.dart';
+import 'screen/home_screen.dart';
 
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // OpenFoodFacts configuration
     OpenFoodAPIConfiguration.userAgent =
         UserAgent(name: 'NutriMate', url: 'NoURL');
     OpenFoodAPIConfiguration.globalCountry = OpenFoodFactsCountry.ITALY;
@@ -26,7 +25,6 @@ class MyApp extends StatelessWidget {
       OpenFoodFactsLanguage.ITALIAN
     ];
 
-    // System Navigation Bar configuration
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarIconBrightness: Brightness.light,
       systemNavigationBarDividerColor: Color.fromARGB(0, 230, 34, 34),
