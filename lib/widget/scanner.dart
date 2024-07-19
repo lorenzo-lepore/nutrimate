@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
+import 'package:nutrimate/service/api_service.dart';
+import 'package:nutrimate/screen/product_details_screen.dart';
+
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:nutrimate/services/api_service.dart';
-import 'package:nutrimate/screens/product_details_screen.dart';
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({super.key});

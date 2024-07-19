@@ -54,6 +54,10 @@ dependencies:
   path: ^1.9.0
   flutter_native_splash: ^2.4.1
   flutter_launcher_icons: ^0.13.1
+  shared_preferences: ^2.2.3
+  get: ^4.6.6
+  connectivity_plus: ^6.0.3
+  internet_connection_checker: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +91,31 @@ flutter:
     - assets/splash.png
     - assets/new-logo.png
     - .env
+
+  fonts: 
+    - family: Kadwa
+      fonts:
+        - asset: assets/fonts/Kadwa/Kadwa-Bold.ttf
+        - asset: assets/fonts/Kadwa/Kadwa-Regular.ttf
+    - family: Nunito  
+      fonts:
+        - asset: assets/fonts/Nunito/Nunito-Italic-VariableFont_wght.ttf
+        - asset: assets/fonts/Nunito/Nunito-VariableFont_wght.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-Black.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-BlackItalic.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-Bold.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-BoldItalic.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-ExtraBoldItalic.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-ExtraLight.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-ExtraLightItalic.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-Italic.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-Light.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-LightItalic.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-Medium.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-MediumItalic.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-Regular.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-SemiBold.ttf
+        - asset: assets/fonts/Nunito/static/Nunito-SemiBoldItalic.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

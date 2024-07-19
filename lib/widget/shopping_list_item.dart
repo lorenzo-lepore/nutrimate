@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+
+import 'package:nutrimate/model/list_item.dart';
+import 'package:nutrimate/service/api_service.dart';
+import 'package:nutrimate/screen/product_details_screen.dart';
+import 'package:nutrimate/provider/shopping_list_provider.dart';
+
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nutrimate/models/shopping_list_element.dart';
-import 'package:nutrimate/services/api_service.dart';
-import 'package:nutrimate/screens/product_details_screen.dart';
+
 import 'package:provider/provider.dart';
-import 'package:nutrimate/providers/shopping_list_provider.dart';
 
 class MyItem extends StatefulWidget {
   const MyItem({super.key, required this.item});
 
-  final ListElement item;
+  final ListItem item;
 
   @override
   State<MyItem> createState() => _MyItemState();
@@ -151,100 +154,104 @@ class _MyItemState extends State<MyItem> {
                         title: Text('Modifica prodotto',
                             style: GoogleFonts.kadwa(),
                             textAlign: TextAlign.center),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  TextFormField(
-                                    enabled: widget.item.barcode == null,
-                                    controller: _modifiedProductNameController,
-                                    decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Nome prodotto',
-                                    ),
-                                    validator: (String? value) {
-                                      if (value == null ||
-                                          value.trim().isEmpty) {
-                                        return 'Inserisci un nome valido';
-                                      }
-                                      _modifiedProductName = value.trim();
-                                      return null;
-                                    },
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 22.0),
-                                    child: TextFormField(
+                        content: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(height: 8),
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                      enabled: widget.item.barcode == null,
                                       controller:
-                                          _modifiedProductQuantityController,
-                                      keyboardType: TextInputType.number,
+                                          _modifiedProductNameController,
                                       decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
-                                        labelText: 'Quantità',
+                                        labelText: 'Nome prodotto',
                                       ),
                                       validator: (String? value) {
                                         if (value == null ||
-                                            value.isEmpty ||
-                                            int.tryParse(value) == null ||
-                                            int.tryParse(value)! <= 0) {
-                                          return 'Inserisci una quantità valida';
+                                            value.trim().isEmpty) {
+                                          return 'Inserisci un nome valido';
                                         }
-                                        _modifiedProductQuantity =
-                                            int.parse(value);
+                                        _modifiedProductName = value.trim();
                                         return null;
                                       },
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 22.0),
-                                    child: ButtonTheme(
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color.fromARGB(
-                                              244, 178, 218, 94),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 22.0),
+                                      child: TextFormField(
+                                        autofocus: true,
+                                        controller:
+                                            _modifiedProductQuantityController,
+                                        keyboardType: TextInputType.number,
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Quantità',
                                         ),
-                                        child: const Text(
-                                          'Aggiungi',
-                                          style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 82, 100, 45)),
-                                        ),
-                                        onPressed: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            context
-                                                .read<ShoppingListProvider>()
-                                                .modifyItemDetails(
-                                                  context
-                                                      .read<
-                                                          ShoppingListProvider>()
-                                                      .items
-                                                      .indexOf(widget.item),
-                                                  title: _modifiedProductName,
-                                                  quantity:
-                                                      _modifiedProductQuantity,
-                                                );
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                                content:
-                                                    Text('Prodotto modificato'),
-                                              ),
-                                            );
-                                            Navigator.pop(context);
+                                        validator: (String? value) {
+                                          if (value == null ||
+                                              value.isEmpty ||
+                                              int.tryParse(value) == null ||
+                                              int.tryParse(value)! <= 0) {
+                                            return 'Inserisci una quantità valida';
                                           }
+                                          _modifiedProductQuantity =
+                                              int.parse(value);
+                                          return null;
                                         },
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 22.0),
+                                      child: ButtonTheme(
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    244, 178, 218, 94),
+                                          ),
+                                          child: const Text(
+                                            'Aggiungi',
+                                            style: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 82, 100, 45)),
+                                          ),
+                                          onPressed: () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              context
+                                                  .read<ShoppingListProvider>()
+                                                  .modifyItemDetails(
+                                                    context
+                                                        .read<
+                                                            ShoppingListProvider>()
+                                                        .items
+                                                        .indexOf(widget.item),
+                                                    title: _modifiedProductName,
+                                                    quantity:
+                                                        _modifiedProductQuantity,
+                                                  );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Prodotto modificato'),
+                                                ),
+                                              );
+                                              Navigator.pop(context);
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },

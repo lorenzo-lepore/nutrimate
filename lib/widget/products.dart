@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+
+import 'package:nutrimate/service/api_service.dart';
+import 'package:nutrimate/widget/product_card.dart';
+
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nutrimate/services/api_service.dart';
-import 'package:nutrimate/widgets/product_card.dart';
+
 import 'package:openfoodfacts/openfoodfacts.dart';
+
 import 'package:easy_debounce/easy_debounce.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -42,7 +46,6 @@ class _ProductsPageState extends State<ProductsPage> {
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
-              // Barra di ricerca
               child: TextField(
                 cursorColor: const Color.fromARGB(244, 178, 218, 94),
                 decoration: const InputDecoration(
@@ -73,7 +76,8 @@ class _ProductsPageState extends State<ProductsPage> {
                         setState(() {
                           _isLoaded = false;
                         });
-                        _products = await ApiService().searchProducts(userInput);
+                        _products =
+                            await ApiService().searchProducts(userInput);
                         if (_products != null) {
                           setState(() {
                             _isLoaded = true;

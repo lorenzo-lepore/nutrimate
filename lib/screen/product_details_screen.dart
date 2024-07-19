@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:nutrimate/providers/shopping_list_provider.dart';
-import 'package:nutrimate/models/shopping_list_element.dart';
+import 'package:nutrimate/provider/shopping_list_provider.dart';
+import 'package:nutrimate/model/list_item.dart';
 
 class ProductDetailsPage extends StatefulWidget {
-  const ProductDetailsPage({super.key, required this.product, required this.showAddButton});
+  const ProductDetailsPage(
+      {super.key, required this.product, required this.showAddButton});
 
   final Product? product;
   final bool showAddButton;
@@ -17,33 +17,17 @@ class ProductDetailsPage extends StatefulWidget {
 }
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
-  late Logger _logger;
   late Map<String, String> _nutriments;
-  late OrderedNutrients _futureOrderedNutrients;
   late String _productName;
   late String _productBarcode;
-
-  Future<OrderedNutrients> fetchOrderedNutrients() async {
-    final OrderedNutrients nutrients =
-        await OpenFoodAPIClient.getOrderedNutrients(
-      country: OpenFoodFactsCountry.ITALY,
-      language: OpenFoodFactsLanguage.ITALIAN,
-    );
-    return nutrients;
-  }
 
   @override
   void initState() {
     super.initState();
-    _logger = Logger();
     _productName =
         widget.product!.getBestProductName(OpenFoodFactsLanguage.ITALIAN);
     _productBarcode = widget.product!.barcode!;
     _nutriments = widget.product?.nutriments?.toData() ?? {};
-    fetchOrderedNutrients().then(
-      (OrderedNutrients nutrients) {
-      },
-    );
   }
 
   @override
@@ -130,7 +114,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                         fontSize: 14.0),
                                   ),
                                   TextSpan(
-                                    text: '${widget.product?.ingredientsText}',
+                                    text: (widget.product!.ingredientsText!
+                                            .isNotEmpty)
+                                        ? widget.product?.ingredientsText
+                                        : 'Nessuna informazione sugli ingredienti disponibile.',
                                     style: const TextStyle(fontSize: 12.0),
                                   ),
                                 ]),
@@ -196,7 +183,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                         fontSize: 14.0),
                                   ),
                                   TextSpan(
-                                    text: '${widget.product?.servingSize}',
+                                    text: widget.product?.servingSize ??
+                                        'Nessuna informazione disponibile.',
                                     style: const TextStyle(fontSize: 12.0),
                                   ),
                                 ]),
@@ -237,40 +225,42 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ],
         ),
       ),
-      bottomNavigationBar: widget.showAddButton ? Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          onPressed: () {
-            context.read<ShoppingListProvider>().addToItemsList(
-                  ListElement(
-                    title: _productName,
-                    quantity: 1,
-                    barcode: _productBarcode,
-                    status: false,
+      bottomNavigationBar: widget.showAddButton
+          ? Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  context.read<ShoppingListProvider>().addToItemsList(
+                        ListItem(
+                          title: _productName,
+                          quantity: 1,
+                          barcode: _productBarcode,
+                          status: false,
+                        ),
+                      );
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content:
+                          Text('Prodotto aggiunto con successo alla lista.'),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 51.0),
+                  backgroundColor: const Color.fromARGB(244, 178, 218, 94),
+                ),
+                child: const Text(
+                  'Aggiungi alla lista',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 82, 100, 45),
+                    fontSize: 16.0,
                   ),
-                );
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).clearSnackBars();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                behavior: SnackBarBehavior.floating,
-                content: Text('Prodotto aggiunto con successo alla lista.'),
+                ),
               ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 51.0),
-            backgroundColor: const Color.fromARGB(244, 178, 218, 94),
-          ),
-          child: const Text(
-            'Aggiungi alla lista',
-            style: TextStyle(
-              color: Color.fromARGB(255, 82, 100, 45),
-              fontSize: 16.0,
-            ),
-          ),
-        ),
-      ) : null,
+            )
+          : null,
     );
   }
 }

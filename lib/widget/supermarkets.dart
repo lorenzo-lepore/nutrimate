@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
@@ -6,20 +8,43 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SupermarketsPage extends StatefulWidget {
-  const SupermarketsPage({super.key});
+  const SupermarketsPage({super.key, required this.subscription});
+
+  final StreamSubscription<bool> subscription;
 
   @override
   State<SupermarketsPage> createState() => _SupermarketsPageState();
 }
 
-class _SupermarketsPageState extends State<SupermarketsPage> { 
+class _SupermarketsPageState extends State<SupermarketsPage> {
+  final _placesAPI = GoogleMapsPlaces(apiKey: '${dotenv.env['MAPS_API_KEY']}');
   late GoogleMapController _mapController;
+  late List<PlacesSearchResult> _placesList;
   late LatLng _devicePosition;
-  bool _isLoading = true;
-  final _placesAPI =
-      GoogleMapsPlaces(apiKey: '${dotenv.env['MAPS_API_KEY']}');
-  List<PlacesSearchResult> _placesList = [];
-  Set<Marker> _markers = {};
+  late Set<Marker> _markers;
+  late bool _isLoading;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLoading = true;
+    _placesList = [];
+    _markers = {};
+    /* widget.subscription.onData((isConnected) {
+      if (isConnected) {
+        getLocation().then((_) {
+          if (!_isLoading) {
+            searchPlaces('supermarket', _devicePosition);
+          }
+        });
+      }
+    }); */
+    getLocation().then((_) {
+      if (!_isLoading) {
+        searchPlaces('supermarket', _devicePosition);
+      }
+    });
+  }
 
   Future<void> getLocation() async {
     bool serviceEnabled;
@@ -104,20 +129,19 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                photoUrl,
-                                isAntiAlias: true,
-                                filterQuality: FilterQuality.high,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) {
-                                    return child;
-                                  } else {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
+                              child: Image.network(photoUrl,
+                                  isAntiAlias: true,
+                                  filterQuality: FilterQuality.high,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                } else {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
                                 }
-                              ),
+                              }),
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -171,16 +195,6 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
     } else {
       throw Exception(result.errorMessage);
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getLocation().then((_) {
-      if (!_isLoading) {
-        searchPlaces('supermarket', _devicePosition);
-      }
-    });
   }
 
   @override
