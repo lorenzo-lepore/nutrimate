@@ -40,7 +40,7 @@ dependencies:
   openfoodfacts: ^3.9.0
   google_maps_flutter: ^2.7.0
   camera: ^0.11.0
-  dio: ^5.4.3+1
+  dio: ^5.5.0+1
   flutter_svg: ^2.0.10+1
   flutter_barcode_scanner: ^2.0.0
   flutter_google_maps_webservices: ^1.1.1
@@ -90,7 +90,7 @@ flutter:
     - assets/groceries3.svg
     - assets/splash.png
     - assets/new-logo.png
-    - .env
+    # - .env
 
   fonts: 
     - family: Kadwa

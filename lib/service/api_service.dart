@@ -116,7 +116,7 @@ class ApiService {
       }
       return products;
     } catch (e) {
-      throw Exception(e);
+      throw Exception('Errore durante il recupero dei dati $e');
     }
   }
 

@@ -1,3 +1,5 @@
+/* Nearby supermarkets widget: please uncomment the code if you desire to try this feature */
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -5,19 +7,19 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SupermarketsPage extends StatefulWidget {
   const SupermarketsPage({super.key, required this.subscription});
 
-  final StreamSubscription<bool> subscription;
+  final StreamSubscription<bool>? subscription;
 
   @override
   State<SupermarketsPage> createState() => _SupermarketsPageState();
 }
 
 class _SupermarketsPageState extends State<SupermarketsPage> {
-  final _placesAPI = GoogleMapsPlaces(apiKey: '${dotenv.env['MAPS_API_KEY']}');
+  final _placesAPI = GoogleMapsPlaces(/* apiKey: '${dotenv.env['MAPS_API_KEY']}' */);
   late GoogleMapController _mapController;
   late List<PlacesSearchResult> _placesList;
   late LatLng _devicePosition;
@@ -199,7 +201,7 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
+    return const Center(child: Text('Nearby supermarkets page')); /* _isLoading
         ? const Center(
             child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -216,6 +218,6 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
             initialCameraPosition:
                 CameraPosition(target: _devicePosition, zoom: 13.0),
             markers: _markers,
-          );
+          ); */
   }
 }
