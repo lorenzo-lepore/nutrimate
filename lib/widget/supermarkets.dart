@@ -201,7 +201,7 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Nearby supermarkets page')); /* _isLoading
+    return  _isLoading
         ? const Center(
             child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -218,6 +218,6 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
             initialCameraPosition:
                 CameraPosition(target: _devicePosition, zoom: 13.0),
             markers: _markers,
-          ); */
+          );
   }
 }
