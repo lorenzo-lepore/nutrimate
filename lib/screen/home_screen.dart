@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:nutrimate/widget/shopping_list.dart';
 import 'package:nutrimate/widget/products.dart';
@@ -26,7 +27,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ConnectivityService _connectivityService = ConnectivityService();
+  final ConnectivityService? _connectivityService =
+      !kIsWeb ? ConnectivityService() : null;
   late StreamSubscription<bool>? _subscription;
   late bool _isConnected;
   late bool _isFirstConnection;
@@ -43,36 +45,37 @@ class _HomeScreenState extends State<HomeScreen> {
     _productName = '';
     _productQuantity = 0;
     _isFirstConnection = true;
-    _subscription =
-        _connectivityService.connectivityStream.listen((isConnected) {
-      setState(() {
-        _isConnected = isConnected;
-      });
-      if (!_isConnected) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Connessione assente. Le funzionalità sono limitate.',
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
-        _isFirstConnection = false;
-      } else if (_isConnected && !_isFirstConnection) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Connessione ristabilita.',
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    });
+    _subscription = !kIsWeb
+        ? (_connectivityService?.connectivityStream.listen((isConnected) {
+            setState(() {
+              _isConnected = isConnected;
+            });
+            if (!_isConnected) {
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Connessione assente. Le funzionalità sono limitate.',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              _isFirstConnection = false;
+            } else if (_isConnected && !_isFirstConnection) {
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Connessione ristabilita.',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+          }))
+        : null;
 
     if (_bottomBarIndex == 2) {
       _showFAB = true;
@@ -81,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _subscription?.cancel();
+    !kIsWeb ? (_subscription?.cancel()) : null;
     super.dispose();
   }
 
@@ -96,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  List<Widget> _widgetOptions(StreamSubscription<bool> subscription) {
+  List<Widget> _widgetOptions(StreamSubscription<bool>? subscription) {
     return <Widget>[
       SupermarketsPage(subscription: subscription),
       const ProductsPage(),
@@ -132,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: IndexedStack(
         index: _bottomBarIndex,
-        children: _widgetOptions(_subscription!),
+        children: _widgetOptions(_subscription),
       ),
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 28,
