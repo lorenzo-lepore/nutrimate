@@ -25,6 +25,8 @@ Further actions based on running environment:
 
 **Android version:** include your Google Maps API key in the android/app/scr/main/AndroidManifest.xml file. Run in debug mode by connecting your phone via adb or get the apk by running `flutter build apk`
 
+Remember to download project-needed dependencies by running `flutter pub get`. 
+
 ## Execution
 
 On your machine, for the web version, run `flutter run -d yourbrowser --web-browser-flag "--disable-web-security"`. 
