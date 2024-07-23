@@ -58,7 +58,6 @@ class _MyItemState extends State<MyItem> {
             ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                behavior: SnackBarBehavior.floating,
                 content:
                     Text('Dettagli non disponibili. Prodotto non tracciato.'),
                 duration: Duration(seconds: 2),
