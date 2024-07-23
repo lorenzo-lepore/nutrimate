@@ -28,4 +28,4 @@ The NutriMate repository is created and curated by following GitHub best practic
 ## Copyright
 Copyright © 2024 NutriMate. All rights reserved.
 
-This software and its documentation are protected by copyright law. Unauthorized reproduction or distribution of this software, or any portion of it, may infringe upon these rights. We kindly request that you respect our intellectual property.
+This software and its documentation are protected by copyright law. Unauthorized reproduction or distribution of this software, or any portion of it, may infringe upon these rights.  
