@@ -4,16 +4,11 @@ import 'package:openfoodfacts/openfoodfacts.dart';
 
 import 'package:nutrimate/screen/product_details_screen.dart';
 
-class ProductCard extends StatefulWidget {
+class ProductCard extends StatelessWidget {
   const ProductCard({super.key, required this.product});
 
   final Product? product;
 
-  @override
-  State<ProductCard> createState() => _ProductCardState();
-}
-
-class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -22,7 +17,7 @@ class _ProductCardState extends State<ProductCard> {
           context,
           MaterialPageRoute(
             builder: (context) => ProductDetailsPage(
-              product: widget.product,
+              product: product,
               showAddButton: true,
             ),
           ),
@@ -44,7 +39,7 @@ class _ProductCardState extends State<ProductCard> {
             children: [
               const SizedBox(height: 8.0),
               Image.network(
-                widget.product?.imageFrontSmallUrl ??
+                product?.imageFrontSmallUrl ??
                     'https://s3-cdn.cmlabs.co/page/2023/01/24/a-guideline-on-how-to-fix-error-404-not-found-effectively-519451.png',
                 fit: BoxFit.scaleDown,
                 width: 95,
@@ -52,7 +47,7 @@ class _ProductCardState extends State<ProductCard> {
               ),
               const SizedBox(height: 2.0),
               Text(
-                '${widget.product?.productName}',
+                '${product?.productName}',
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Colors.black,
@@ -60,7 +55,7 @@ class _ProductCardState extends State<ProductCard> {
               ),
               const SizedBox(height: 0.5),
               Text(
-                '${widget.product?.quantity}',
+                '${product?.quantity}',
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Colors.black,
