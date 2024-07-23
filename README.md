@@ -18,6 +18,7 @@ The NutriMate repository is created and curated by following GitHub best practic
 - A .env file must be added to the root folder of the project. This file must contain the variable MAPS_API_KEY. In this section, please provide your API key
 - A reference to the .env file must be added (or uncommented, if found) in the asset section of the pubspec.yaml file
 - Commented code in the lib/widgets/supermarkets.dart file must be uncommented
+- Commented code in the main.dart needed for the .env loading must be uncommented
 
 Project-needed dependencies must be downloaded by running `flutter pub get` (mandatory).
 
