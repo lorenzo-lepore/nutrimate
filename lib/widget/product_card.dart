@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:openfoodfacts/openfoodfacts.dart';
-
 import 'package:nutrimate/screen/product_details_screen.dart';
 
 class ProductCard extends StatelessWidget {

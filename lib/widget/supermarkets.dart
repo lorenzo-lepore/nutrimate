@@ -1,7 +1,6 @@
 /* Nearby supermarkets widget: please uncomment the code if you desire to try this feature */
 
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
@@ -19,19 +18,21 @@ class SupermarketsPage extends StatefulWidget {
 }
 
 class _SupermarketsPageState extends State<SupermarketsPage> {
-  final _placesAPI = GoogleMapsPlaces(/* apiKey: '${dotenv.env['MAPS_API_KEY']}' */);
+  final _placesAPI =
+      GoogleMapsPlaces(/* apiKey: '${dotenv.env['MAPS_API_KEY']}' */);
   late GoogleMapController _mapController;
-  late List<PlacesSearchResult> _placesList;
   late LatLng _devicePosition;
-  late Set<Marker> _markers;
-  late bool _isLoading;
+  List<PlacesSearchResult> _placesList = [];
+  Set<Marker> _markers = {};
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _isLoading = true;
-    _placesList = [];
-    _markers = {};
+    /* To implement: recall getLocation() when connection is re-established 
+       Do not uncomment!
+    */
+
     /* widget.subscription.onData((isConnected) {
       if (isConnected) {
         getLocation().then((_) {
@@ -46,6 +47,13 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
         searchPlaces('supermarket', _devicePosition);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _placesAPI.dispose();
+    widget.subscription?.cancel();
   }
 
   Future<void> getLocation() async {
@@ -201,7 +209,7 @@ class _SupermarketsPageState extends State<SupermarketsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return  _isLoading
+    return _isLoading
         ? const Center(
             child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

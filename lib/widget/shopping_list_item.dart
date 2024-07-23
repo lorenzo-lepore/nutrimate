@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:nutrimate/model/list_item.dart';
 import 'package:nutrimate/service/api_service.dart';
 import 'package:nutrimate/screen/product_details_screen.dart';
 import 'package:nutrimate/provider/shopping_list_provider.dart';
-
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:provider/provider.dart';
 
 class MyItem extends StatefulWidget {
@@ -20,8 +17,8 @@ class MyItem extends StatefulWidget {
 
 class _MyItemState extends State<MyItem> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late TextEditingController _modifiedProductNameController;
-  late TextEditingController _modifiedProductQuantityController;
+  late final TextEditingController _modifiedProductNameController;
+  late final TextEditingController _modifiedProductQuantityController;
   late String _modifiedProductName;
   late int _modifiedProductQuantity;
 

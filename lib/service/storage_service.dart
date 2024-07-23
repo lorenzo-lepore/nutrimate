@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:nutrimate/model/list_item.dart';
 
 class StorageService {

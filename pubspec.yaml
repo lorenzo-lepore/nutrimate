@@ -91,7 +91,7 @@ flutter:
     - assets/groceries3.svg
     - assets/splash.png
     - assets/new-logo.png
-    # - .env
+    - .env
 
   fonts: 
     - family: Kadwa
