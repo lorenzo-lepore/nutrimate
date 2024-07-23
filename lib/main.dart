@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'provider/shopping_list_provider.dart';
 import 'package:nutrimate/screen/home_screen.dart';
 import 'package:nutrimate/configuration/off_config.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
