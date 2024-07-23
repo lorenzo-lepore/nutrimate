@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:nutrimate/model/list_item.dart';
 import 'package:nutrimate/service/storage_service.dart';
 
 class ShoppingListProvider extends ChangeNotifier {
-  late List<ListItem> items;
-  late bool isLoading;
-  late StorageService _storageService;
+  final StorageService _storageService = StorageService();
+  List<ListItem> items = [];
+  bool isLoading = true;
 
   ShoppingListProvider() {
-    items = [];
-    isLoading = true;
-    _storageService = StorageService();
     loadItems();
   }
 

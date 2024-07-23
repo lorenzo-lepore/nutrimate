@@ -1,19 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:nutrimate/widget/shopping_list.dart';
 import 'package:nutrimate/widget/products.dart';
 import 'package:nutrimate/widget/scanner.dart';
 import 'package:nutrimate/widget/supermarkets.dart';
-
 import 'package:nutrimate/provider/shopping_list_provider.dart';
 import 'package:nutrimate/model/list_item.dart';
 import 'package:nutrimate/service/connectivity_service.dart';
-
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,20 +26,15 @@ class _HomeScreenState extends State<HomeScreen> {
       !kIsWeb ? ConnectivityService() : null;
   late StreamSubscription<bool>? _subscription;
   late bool _isConnected;
-  late bool _isFirstConnection;
-  late bool _showFAB;
-  late String _productName;
-  late int _productQuantity;
-  late int _bottomBarIndex;
+  String _productName = '';
+  bool _isFirstConnection = true;
+  bool _showFAB = false;
+  int _productQuantity = 0;
+  int _bottomBarIndex = 2;
 
   @override
   void initState() {
     super.initState();
-    _showFAB = false;
-    _bottomBarIndex = 2;
-    _productName = '';
-    _productQuantity = 0;
-    _isFirstConnection = true;
     _subscription = !kIsWeb
         ? (_connectivityService?.connectivityStream.listen((isConnected) {
             setState(() {
@@ -84,8 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    !kIsWeb ? (_subscription?.cancel()) : null;
     super.dispose();
+    !kIsWeb ? (_subscription?.cancel()) : null;
   }
 
   void _onItemTapped(int index) {

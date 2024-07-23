@@ -31,6 +31,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<DataRow> dataRows = _nutriments.entries.map((entry) {
       return DataRow(

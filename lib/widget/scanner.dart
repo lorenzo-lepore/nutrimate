@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'package:nutrimate/service/api_service.dart';
 import 'package:nutrimate/screen/product_details_screen.dart';
-
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class ScannerPage extends StatefulWidget {
+class ScannerPage extends StatelessWidget {
   const ScannerPage({super.key});
 
-  @override
-  State<ScannerPage> createState() => _ScannerPageState();
-}
-
-class _ScannerPageState extends State<ScannerPage> {
   bool isValidBarcode(String? barcode) {
     return barcode != null && barcode.length == 13;
   }
