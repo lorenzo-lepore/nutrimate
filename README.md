@@ -17,15 +17,15 @@ NutriMate is a comprehensive application designed to streamline grocery shopping
 The NutriMate repository is created and curated by following GitHub best practices. Since a Google Maps API (comprehensive of Places API) is required to make the Nearby Supermarkets feature functional, the following rules must be followed: 
 - A .env file must be added to the root folder of the project. This file must contain the variable MAPS_API_KEY. In this section, please provide your API key
 - A reference to the .env file must be added (or uncommented, if found) in the asset section of the pubspec.yaml file
-- Code in the supermarkets.dart file must be uncommented
+- Commented code in the lib/widgets/supermarkets.dart file must be uncommented
+
+Project-needed dependencies must be downloaded by running `flutter pub get` (mandatory).
 
 Further actions based on running environment: 
 
-**Web version:** include your Google Maps API key in the web/index.html file
+- **Web version:** include your Google Maps API key in the web/index.html file
 
-**Android version:** include your Google Maps API key in the android/app/scr/main/AndroidManifest.xml file. Run in debug mode by connecting your phone via adb or get the apk by running `flutter build apk`
-
-Remember to download project-needed dependencies by running `flutter pub get`. 
+- **Android version:** include your Google Maps API key in the android/app/scr/main/AndroidManifest.xml file. Run in debug mode by connecting your phone via adb or get the apk by running `flutter build apk`. Finally, install the apk on your chosen Android device.
 
 ## Execution
 
@@ -33,7 +33,7 @@ On your machine, for the web version, run `flutter run -d yourbrowser --web-brow
 
 The `--disable-web-security` flag is needed to avoid CORS related errors.
 
-On Android, simply install and run the apk.
+On Android, simply run the installed app.
 
 ## Copyright
 Copyright © 2024 NutriMate. All rights reserved.
